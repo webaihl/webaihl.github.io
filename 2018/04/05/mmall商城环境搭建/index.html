@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg">
+  <link rel="mask-icon" href="/images/avatar.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"superweb.club","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="项目开发环境搭建[TOC] 后端环境一、ZSH配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mmall商城环境搭建">
+<meta property="og:url" content="http://superweb.club/2018/04/05/mmall%E5%95%86%E5%9F%8E%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/index.html">
+<meta property="og:site_name" content="SuperWeb">
+<meta property="og:description" content="项目开发环境搭建[TOC] 后端环境一、ZSH配置">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-04-05T14:50:49.000Z">
+<meta property="article:modified_time" content="2020-03-16T14:55:25.582Z">
+<meta property="article:author" content="Web">
+<meta property="article:tag" content="Liunx">
+<meta property="article:tag" content="Shell">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://superweb.club/2018/04/05/mmall%E5%95%86%E5%9F%8E%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>mmall商城环境搭建 | SuperWeb</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SuperWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-fw fa-tag"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+      <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+  </div>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://superweb.club/2018/04/05/mmall%E5%95%86%E5%9F%8E%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Web">
+      <meta itemprop="description" content="愿我走过的苦难你不必经历，愿我已有的幸福你正在触及。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SuperWeb">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          mmall商城环境搭建
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2018-04-05 22:50:49" itemprop="dateCreated datePublished" datetime="2018-04-05T22:50:49+08:00">2018-04-05</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-16 22:55:25" itemprop="dateModified" datetime="2020-03-16T22:55:25+08:00">2020-03-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Liunx/" itemprop="url" rel="index"><span itemprop="name">Liunx</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>13 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="项目开发环境搭建"><a href="#项目开发环境搭建" class="headerlink" title="项目开发环境搭建"></a>项目开发环境搭建</h1><p>[TOC]</p>
+<h2 id="后端环境"><a href="#后端环境" class="headerlink" title="后端环境"></a>后端环境</h2><h3 id="一、ZSH配置"><a href="#一、ZSH配置" class="headerlink" title="一、ZSH配置"></a>一、ZSH配置</h3><a id="more"></a>
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install zsh</span><br><span class="line">sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 编辑配置文件,修改主题 ZSH_THEME=<span class="string">"maran"</span></span></span><br><span class="line">vim .vimrc</span><br><span class="line"><span class="meta">#</span><span class="bash"> 改变用户的默认shell</span></span><br><span class="line">chsh -s /bin/zsh [username]</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、环境变量"><a href="#二、环境变量" class="headerlink" title="二、环境变量"></a>二、环境变量</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 配置在 .zshrc(/etc/profile)中。</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行 <span class="built_in">source</span> /etc/profile 生效</span></span><br><span class="line">JAVA_HOME=/home/web/own/jdk1.8.0_141  #(Java所在目录)</span><br><span class="line">CLASS_PATH=.:$JAVA_HOME/lib/</span><br><span class="line">TOMCAT_HOME=/home/web/own/apache-tomcat-8.5.29 #(tomcat所在目录)</span><br><span class="line">M2_HOME=/home/web/own/apache-maven-3.5.2 #(maven所在目录)</span><br><span class="line">PATH=$PATH:$JAVA_HOME/bin:$TOMCAT_HOME:$M2_HOME/bin   #(拼接Path)</span><br><span class="line">export JAVA_HOME  CLASS_PATH  TOMCAT_HOME PATH</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、Tomcat集群配置"><a href="#三、Tomcat集群配置" class="headerlink" title="三、Tomcat集群配置"></a>三、Tomcat集群配置</h3><blockquote>
+<p>多主机: 将Tomcat实例配置在多个主机上，并且部署同样的代码。</p>
+<p>单主机: 将Tomcat实例配置在一个主机上，配置不同的运行端口号。</p>
+<p>通过Nginx进行请求的转发。</p>
+</blockquote>
+<p><strong>配置文件在${Tomacat}/conf/server.xml</strong></p>
+<h4 id="1、字符配置"><a href="#1、字符配置" class="headerlink" title="1、字符配置"></a>1、字符配置</h4><blockquote>
+<p>在Connector节点添加<strong>URIEncoding=”UTF-8”</strong></p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">"8443"</span> <span class="attr">URIEncoding</span>=<span class="string">"UTF-8"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2、单机多实例配置"><a href="#2、单机多实例配置" class="headerlink" title="2、单机多实例配置"></a>2、单机多实例配置</h4><blockquote>
+<p>修改新实例的运行端口号</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">"8005"</span> <span class="attr">shutdown</span>=<span class="string">"SHUTDOWN"</span>&gt;</span>...<span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8080"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">connectionTimeout</span>=<span class="string">"20000"</span></span></span><br><span class="line"><span class="tag">               <span class="attr">redirectPort</span>=<span class="string">"8443"</span> <span class="attr">URIEncoding</span>=<span class="string">"UTF-8"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8009"</span> <span class="attr">protocol</span>=<span class="string">"AJP/1.3"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3、环境变量配置"><a href="#3、环境变量配置" class="headerlink" title="3、环境变量配置"></a>3、环境变量配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 实例一</span></span><br><span class="line">export CATALINA_BASE=/home/web/own/superweb.club</span><br><span class="line">export CATALINA_HOME=/home/web/own/superweb.club</span><br><span class="line">export TOMCAT_HOME=/home/web/own/superweb.club</span><br><span class="line"><span class="meta">#</span><span class="bash"> 实例二</span></span><br><span class="line">export CATALINA_2_BASE=/home/web/own/superweb2.club</span><br><span class="line">export CATALINA_2_HOME=/home/web/own/superweb2.club</span><br><span class="line">export TOMCAT_2_HOME=/home/web/own/superweb2.club</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="四、vsftpd"><a href="#四、vsftpd" class="headerlink" title="四、vsftpd"></a>四、vsftpd</h3><h4 id="1、安装"><a href="#1、安装" class="headerlink" title="1、安装"></a>1、安装</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install -y vsftpd</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、配置"><a href="#2、配置" class="headerlink" title="2、配置"></a>2、配置</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/vsftpd/vsftpd.conf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 配置文件修改如下:</span></span><br><span class="line"></span><br><span class="line">local_root=/product/ftpfile</span><br><span class="line"><span class="meta">#</span><span class="bash">chroot_local_user=YES </span></span><br><span class="line">anon_root=/product/ftpfile</span><br><span class="line">use_localtime=YES</span><br><span class="line">chroot_local_user=NO</span><br><span class="line">chroot_list_enable=YES</span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定目录</span></span><br><span class="line">chroot_list_file=/etc/vsftpd/chroot_list</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、创建Ftp用户"><a href="#3、创建Ftp用户" class="headerlink" title="3、创建Ftp用户"></a>3、创建Ftp用户</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 添加ftpuser，指定用户目录，没有登陆权限</span></span><br><span class="line">sudo useradd ftpuser -d ftpfile -s /sbin/nologin</span><br><span class="line"><span class="meta">#</span><span class="bash"> 将ftpfile文件(夹)的拥有者改成ftpuser组的ftpuser用户</span></span><br><span class="line">sudo chown -R ftpuser.ftpuser ftpfile</span><br></pre></td></tr></table></figure>
+
+<h4 id="4、配置问题"><a href="#4、配置问题" class="headerlink" title="4、配置问题"></a>4、配置问题</h4><blockquote>
+<p><strong>新建用户530错误</strong></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/pam.d/vsftpd #注释掉#auth   required    pam_shells.so</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>如果启用chroot,必须保证ftp根目录不可写,这样对于ftp根目录直接为网站根目录的用户不方便,所以建议假如ftp根目录是/home/${cjh},则将访问权限改写如下</strong></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod a-w /home/cjh</span><br></pre></td></tr></table></figure>
+
+<h3 id="五、MySQL"><a href="#五、MySQL" class="headerlink" title="五、MySQL"></a>五、MySQL</h3><h4 id="1、安装-1"><a href="#1、安装-1" class="headerlink" title="1、安装"></a>1、安装</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install mysql-server-5.7</span><br></pre></td></tr></table></figure>
+
+<h4 id="2、字符、远程访问配置"><a href="#2、字符、远程访问配置" class="headerlink" title="2、字符、远程访问配置"></a>2、字符、远程访问配置</h4><ul>
+<li><strong>CentOS</strong></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> MySQL配置文件</span></span><br><span class="line">vim  /etc/my.cnf</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在配置文件添加:</span></span><br><span class="line">[mysqld]</span><br><span class="line">default-character-set=utf8</span><br><span class="line">character-set-server=utf8</span><br><span class="line">collation-server=utf8_general_ci</span><br><span class="line">[client]</span><br><span class="line">default-character-set=utf8</span><br><span class="line"><span class="meta">#</span><span class="bash"> 管理MySQL状态</span></span><br><span class="line">(sudo) service mysqld [restart,stop,start]</span><br><span class="line"><span class="meta">#</span><span class="bash"> MySQL开机启动</span></span><br><span class="line">chkconfig mysqld on</span><br><span class="line"><span class="meta">#</span><span class="bash"> 为root账号设置密码</span></span><br><span class="line">/usr/bin/mysqladmin -u root password 'new-password'</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Ubuntu</strong></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> MySQL配置文件</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 服务端 /etc/mysql/mysql.conf.d/mysqld.cnf  </span></span><br><span class="line">	character-set-server=utf8</span><br><span class="line">	collation-server=utf8_general_ci</span><br><span class="line"><span class="meta">	#</span><span class="bash"> <span class="built_in">bind</span>-address = 127.0.0.1 <span class="comment">#开启远程访问，监听其他IP</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 客户端 /etc/mysql/conf.d/mysql.cnf</span></span><br><span class="line">	default-character-set=utf8 </span><br><span class="line"><span class="meta">#</span><span class="bash"> 管理MySQL状态</span></span><br><span class="line">(sudo) service mysqld [restart,stop,start]</span><br><span class="line"><span class="meta">#</span><span class="bash"> MySQL开机启动</span></span><br><span class="line">	update-rc.d mysql defaults</span><br><span class="line"><span class="meta">#</span><span class="bash"> 为root账号设置密码</span></span><br><span class="line">/usr/bin/mysqladmin -u root password 'new-password'</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、实例化数据库"><a href="#3、实例化数据库" class="headerlink" title="3、实例化数据库"></a>3、实例化数据库</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 建立用户，指定用户名、主机和密码</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> username@host <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'passsword'</span>	</span><br><span class="line"><span class="comment">-- 建立数据库，指定字符集</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">database</span> database_name <span class="keyword">default</span> <span class="built_in">character</span> <span class="keyword">set</span> utf8 <span class="keyword">collate</span> utf8_general_ci;</span><br><span class="line"><span class="comment">-- 赋予用户权限</span></span><br><span class="line"><span class="keyword">grant</span> <span class="keyword">all</span> <span class="keyword">privileges</span> <span class="keyword">on</span> table_name.* <span class="keyword">to</span> username@localhost <span class="keyword">identified</span> <span class="keyword">by</span>  <span class="string">'passwoed'</span>;</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>; <span class="comment">--刷新系统权限表</span></span><br><span class="line"><span class="comment">-- 修改用户密码</span></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">user</span> username@host <span class="keyword">identified</span> <span class="keyword">by</span> <span class="string">'passwoed'</span>;</span><br><span class="line"><span class="keyword">set</span> <span class="keyword">password</span> <span class="keyword">for</span> username@host=<span class="keyword">password</span>(<span class="string">'passwoed'</span>);</span><br><span class="line"><span class="keyword">flush</span> <span class="keyword">privileges</span>; <span class="comment">--刷新系统权限表</span></span><br><span class="line"><span class="comment">-- 录入SQL文件</span></span><br><span class="line">source sql_file_path</span><br></pre></td></tr></table></figure>
+
+<h3 id="六、Nginx（CentOS）"><a href="#六、Nginx（CentOS）" class="headerlink" title="六、Nginx（CentOS）"></a>六、Nginx（CentOS）</h3><h4 id="1、安装-2"><a href="#1、安装-2" class="headerlink" title="1、安装"></a>1、安装</h4><blockquote>
+<p><strong><code>yum</code> 安装:</strong> 是在线安装，好处是：安装方式简单，不易出错；</p>
+<p><strong><code>源码包</code> 安装:</strong> 是先将 <code>nginx</code> 的源码下载下来，在自己的系统里编译生成可执行文件，然后执行。好处是：因为是在自己的系统上编译的，更符合自己系统的性能，也就是说在自己的系统上执行 <code>nginx</code> 服务性能效率更好。 </p>
+</blockquote>
+<ul>
+<li><strong>源码安装</strong></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 安装依赖</span></span><br><span class="line">yum -y install gcc gcc-c++ make libtool zlib zlib-devel openssl openssl-devel pcre pcre-devel</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入Nginx文件根目录，执行如下命令</span></span><br><span class="line">./configure  --prefix=/usr/local/webserver/nginx #配置具体的目录</span><br><span class="line">make &amp;&amp; make install   #默认安装在/usr/local/nginx</span><br><span class="line"><span class="meta">#</span><span class="bash"> 管理Ngnix, Nginx安装位置(<span class="variable">$Ngnix</span>)</span></span><br><span class="line"><span class="meta">$</span><span class="bash">Ngnix/sbin/nginx           <span class="comment">#启动 nginx 服务  -s reload  重新加载配置并启动</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">Ngnix/sbin/nginx -s stop   <span class="comment">#停止 nginx 服务</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash">Ngnix/sbin/nginx -t	    <span class="comment">#验证配置文件的语法</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>命令安装</strong></li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">yum -y install nginx</span><br><span class="line"><span class="meta">#</span><span class="bash"> 管理Ngnix</span></span><br><span class="line">service nginx start #启动 nginx 服务</span><br><span class="line">service nginx stop #停止 nginx 服务</span><br><span class="line">service nginx restart #重启 nginx 服务</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>卸载方式</strong></li>
+</ul>
+<blockquote>
+<p>*<em>在线安装: *</em>可以通过命令 <code>rpm -e nginx</code> 来卸载; 可以尝试 <code>rpm -e --nodeps nginx</code> 不考虑依赖问题卸载 </p>
+</blockquote>
+<blockquote>
+<p><strong>源码安装:</strong>通常都放在 <code>/usr/local/包名</code> 路径下， 不会有任何垃圾文件存在。 删除该文件夹即可。</p>
+</blockquote>
+<h4 id="2、文件配置"><a href="#2、文件配置" class="headerlink" title="2、文件配置"></a>2、文件配置</h4><p><strong>在$Ngnix/conf/nginx.conf</strong> 中添加(Nginx安装位置($Ngnix)):</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include vhost/*.conf;</span><br></pre></td></tr></table></figure>
+
+<p><strong>在配置文件vhost中</strong>添加配置文件test.conf，基本内容如下:</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># nginx多主机请求分发</span></span><br><span class="line"><span class="attribute">upstream</span> superweb.club &#123;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">127.0.0.1:8080</span>;</span><br><span class="line">        <span class="attribute">server</span> <span class="number">127.0.0.1:9080</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 一个服务实例</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;<span class="comment"># 监听port</span></span><br><span class="line">    <span class="attribute">autoindex</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">server_name</span> superweb.club www.superweb.club; <span class="comment"># 定义访问名称</span></span><br><span class="line">    <span class="attribute">access_log</span> /usr/local/nginx/logs/access.log combined;</span><br><span class="line">    <span class="attribute">index</span> index.html index.htm index.jsp index.php;</span><br><span class="line">    <span class="attribute">if</span> ( <span class="variable">$query_string</span> <span class="regexp">~* ".*[\;'\&lt;\&gt;].*"</span> )&#123;</span><br><span class="line">            <span class="attribute">return</span> <span class="number">404</span>;</span><br><span class="line">            &#125;</span><br><span class="line">	<span class="comment">#默认请求</span></span><br><span class="line">    <span class="attribute">location</span> = / &#123;</span><br><span class="line">            <span class="attribute">root</span> /product/frontend/mmall-fe/dist/view; <span class="comment"># 请求本地文件的位置</span></span><br><span class="line">            <span class="comment"># 定义首页索引文件的名称</span></span><br><span class="line">            <span class="attribute">index</span> index.html;</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># expires 7d; 有效时间</span></span><br><span class="line">            <span class="comment"># add_header Access-Control-Allow-Origin *; 添加请求头文件参数(跨域时配置)</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 定义错误提示页面</span></span><br><span class="line">        <span class="attribute">error_page</span>   <span class="number">500</span> <span class="number">502</span> <span class="number">503</span> <span class="number">504</span> /50x.html;</span><br><span class="line">        <span class="attribute">location</span> = /50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"> </span><br><span class="line">     <span class="comment">#静态文件，nginx自己处理</span></span><br><span class="line">     <span class="attribute">location</span> <span class="regexp">~ ^/(images|javascript|js|css|flash|media|static)/</span> &#123;</span><br><span class="line">            </span><br><span class="line">            <span class="comment">#过期30天，静态文件不怎么更新，过期可以设大一点，</span></span><br><span class="line">            <span class="comment">#如果频繁更新，则可以设置得小一点。</span></span><br><span class="line">            <span class="attribute">expires</span> <span class="number">30d</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#禁止访问 .htxxx 文件</span></span><br><span class="line">    <span class="attribute">location</span> <span class="regexp">~ /.ht</span> &#123;</span><br><span class="line">            <span class="attribute">deny</span> all;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3、使用时问题"><a href="#3、使用时问题" class="headerlink" title="3、使用时问题"></a>3、使用时问题</h4><blockquote>
+<p>nginx: [error] open() “/usr/local/nginx/logs/nginx.pid” failed (2: No such file or directory)</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 解决办法</span></span><br><span class="line">sudo $Nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf</span><br></pre></td></tr></table></figure>
+
+<h3 id="七、Redis"><a href="#七、Redis" class="headerlink" title="七、Redis"></a>七、Redis</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入redis根目录</span></span><br><span class="line">cd redis-dir</span><br><span class="line"><span class="meta">#</span><span class="bash"> 执行：</span></span><br><span class="line">make</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入redis根目录下的src目录</span></span><br><span class="line">cd src</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动redis服务.</span></span><br><span class="line">./redis-server [redis.conf] --p port</span><br><span class="line"><span class="meta">#</span><span class="bash"> 启动客户端</span></span><br><span class="line">./redis-cli -p port -a password -h host</span><br></pre></td></tr></table></figure>
+
+<h4 id="八、Git配置"><a href="#八、Git配置" class="headerlink" title="八、Git配置"></a>八、Git配置</h4><p><strong>基本配置</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">git init</span><br><span class="line">git add README.md</span><br><span class="line">git commit -m "first commit"</span><br><span class="line">git config --global user.name 'superweb'</span><br><span class="line">git config --global user.email 'webaihl@gmail.com'</span><br><span class="line">ssh-keygen -C 'webaihl@gmail.com' -t rsa # 生成的密钥文件在主目录，用于和github验证</span><br><span class="line">git remote add origin git@github.com:webaihl/mmall.git # 添加远程分支</span><br><span class="line">git push -u origin master # 推动到远程分支</span><br></pre></td></tr></table></figure>
+
+<p><strong>别名配置</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 添加别名</span></span><br><span class="line">git config --global   alias.co   checkout;</span><br><span class="line">git config --global   alias.ci   commit;</span><br><span class="line">git config --global   alias.st   status;</span><br><span class="line">git config --global   alias.br   branch;</span><br><span class="line">git config --global   alias.cm   commit;</span><br><span class="line">git config --global   alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)&lt;%an&gt;%Creset' --abbrev-commit --"</span><br><span class="line">git config --global   core.ui true;</span><br><span class="line">git config --global   core.quotepath false;</span><br><span class="line">git config --global   core.editor vim;</span><br></pre></td></tr></table></figure>
+
+<p><strong>其他操作</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除远程分支  冒号前面的空格不能少，原理是把一个空分支push到server上，相当于删除该分支。	</span></span><br><span class="line">git push origin :branch-name</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除本地文件 可同步到远程</span></span><br><span class="line">git rm  -r</span><br><span class="line"><span class="meta">#</span><span class="bash">在master分支生成v1.0分支</span></span><br><span class="line">git co -b v1.0 origin/master</span><br><span class="line"><span class="meta">#</span><span class="bash">将之前v1.0分支的内容推送到远程</span></span><br><span class="line">git push origin HEAD -u</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="前端环境配置"><a href="#前端环境配置" class="headerlink" title="前端环境配置"></a>前端环境配置</h2><h3 id="一、node-js"><a href="#一、node-js" class="headerlink" title="一、node.js"></a>一、node.js</h3><blockquote>
+<p>去<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">官网</a>找到最新的或者是您想要的node.js版本，复制url，在CentOS中用wget下载。 </p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 获取源码包</span></span><br><span class="line">wget https://nodejs.org/dist/v8.9.4/node-v8.9.4.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash">解压 </span></span><br><span class="line">tar -zxvf node-v8.9.4.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进入包目录</span></span><br><span class="line">cd node-v8.9.4</span><br><span class="line"><span class="meta">#</span><span class="bash"> 进行配置 </span></span><br><span class="line">./configure</span><br><span class="line"><span class="meta">#</span><span class="bash"> 编译</span></span><br><span class="line">make</span><br><span class="line"><span class="meta">#</span><span class="bash"> 安装</span></span><br><span class="line">sudo make install</span><br><span class="line"><span class="meta">#</span><span class="bash"> 检查</span></span><br><span class="line">node -v </span><br><span class="line">npm  -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、Ruby"><a href="#二、Ruby" class="headerlink" title="二、Ruby"></a>二、Ruby</h3><p><strong>命令安装</strong></p>
+<blockquote>
+<p> apt（Debian 或 Ubuntu）Debian GNU/Linux 和 Ubuntu 使用 apt 包管理器。用法如下：</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install ruby-full</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>yum（CentOS、Fedora 或 RHEL） CentOS、Fedora 和 RHEL 使用 yum 包管理器。用法如下：</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install ruby</span><br></pre></td></tr></table></figure>
+
+<p><strong>源码安装</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入软件根目录运行配置、编译、安装</span></span><br><span class="line">./configure</span><br><span class="line"> make</span><br><span class="line">sudo make install</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 用ruby安装sass</span></span><br><span class="line">gem install sass</span><br><span class="line"><span class="meta">#</span><span class="bash"> 检查sass是否安装成功</span></span><br><span class="line">sass -v</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、初始化"><a href="#三、初始化" class="headerlink" title="三、初始化"></a>三、初始化</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">1.全局安装webpack v2.x</span><br><span class="line">    命令: (sudo) npm install -g webpack</span><br><span class="line"></span><br><span class="line">2.全局安装webpack-dev-server</span><br><span class="line">    命令: (sudo) npm install -g webpack-dev-server</span><br><span class="line"></span><br><span class="line">3.在项目根目录执行npm初始化</span><br><span class="line">    命令: npm install (--registry=https://registry.npm.taobao.org)</span><br><span class="line"></span><br><span class="line">4.启动项目</span><br><span class="line">    开发模式: npm run dev (windows系统上为npm run dev_win)</span><br><span class="line">    生产模式: npm run dist (windows系统上为npm run dist_win)</span><br><span class="line"></span><br><span class="line">5.开发模式下预览项目</span><br><span class="line">    访问：http://localhost:8086/dist/view/index.html</span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Liunx/" rel="tag"># Liunx</a>
+              <a href="/tags/Shell/" rel="tag"># Shell</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/06/20/Java%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="prev" title="Java连接数据库">
+      <i class="fa fa-chevron-left"></i> Java连接数据库
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/05/16/Java%E8%B7%A8%E5%9F%9F/" rel="next" title="Java跨域">
+      Java跨域 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#项目开发环境搭建"><span class="nav-number">1.</span> <span class="nav-text">项目开发环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#后端环境"><span class="nav-number">1.1.</span> <span class="nav-text">后端环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、ZSH配置"><span class="nav-number">1.1.1.</span> <span class="nav-text">一、ZSH配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、环境变量"><span class="nav-number">1.1.2.</span> <span class="nav-text">二、环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、Tomcat集群配置"><span class="nav-number">1.1.3.</span> <span class="nav-text">三、Tomcat集群配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、字符配置"><span class="nav-number">1.1.3.1.</span> <span class="nav-text">1、字符配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、单机多实例配置"><span class="nav-number">1.1.3.2.</span> <span class="nav-text">2、单机多实例配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、环境变量配置"><span class="nav-number">1.1.3.3.</span> <span class="nav-text">3、环境变量配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#四、vsftpd"><span class="nav-number">1.1.4.</span> <span class="nav-text">四、vsftpd</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、安装"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">1、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、配置"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">2、配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、创建Ftp用户"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">3、创建Ftp用户</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4、配置问题"><span class="nav-number">1.1.4.4.</span> <span class="nav-text">4、配置问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#五、MySQL"><span class="nav-number">1.1.5.</span> <span class="nav-text">五、MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、安装-1"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">1、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、字符、远程访问配置"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">2、字符、远程访问配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、实例化数据库"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">3、实例化数据库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#六、Nginx（CentOS）"><span class="nav-number">1.1.6.</span> <span class="nav-text">六、Nginx（CentOS）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、安装-2"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">1、安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、文件配置"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">2、文件配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、使用时问题"><span class="nav-number">1.1.6.3.</span> <span class="nav-text">3、使用时问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#七、Redis"><span class="nav-number">1.1.7.</span> <span class="nav-text">七、Redis</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#八、Git配置"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">八、Git配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端环境配置"><span class="nav-number">1.2.</span> <span class="nav-text">前端环境配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、node-js"><span class="nav-number">1.2.1.</span> <span class="nav-text">一、node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、Ruby"><span class="nav-number">1.2.2.</span> <span class="nav-text">二、Ruby</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、初始化"><span class="nav-number">1.2.3.</span> <span class="nav-text">三、初始化</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Web"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Web</p>
+  <div class="site-description" itemprop="description">愿我走过的苦难你不必经历，愿我已有的幸福你正在触及。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Web</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">31k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">57 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
