@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>git命令记录</title>
+    <url>/2020/03/17/git%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h3 id="1、跳到之前的分支"><a href="#1、跳到之前的分支" class="headerlink" title="1、跳到之前的分支"></a>1、跳到之前的分支</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout - //和cd -类似</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<h3 id="2、查看历史记录"><a href="#2、查看历史记录" class="headerlink" title="2、查看历史记录"></a>2、查看历史记录</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 每个提交在一行内显示</span></span><br><span class="line">git log --oneline</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在所有提交日志中搜索包含「bug」的提交</span></span><br><span class="line">git log --all --grep='bug'</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 获取某人的提交日志</span></span><br><span class="line">git log --author="web"</span><br></pre></td></tr></table></figure>
+
+<h3 id="3、更新本地仓库和远程一致-丢弃本地的修改"><a href="#3、更新本地仓库和远程一致-丢弃本地的修改" class="headerlink" title="3、更新本地仓库和远程一致(丢弃本地的修改)"></a>3、更新本地仓库和远程一致(丢弃本地的修改)</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git fetch origin</span><br><span class="line">git checkout master</span><br><span class="line">git reset --hard origin/master</span><br></pre></td></tr></table></figure>
+
+<h3 id="4、替换最近一次未提交的commit"><a href="#4、替换最近一次未提交的commit" class="headerlink" title="4、替换最近一次未提交的commit"></a>4、替换最近一次<strong>未提交</strong>的commit</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 编辑上次commit message(push之后也可以更改)</span></span><br><span class="line">git commit --amend -m "更好的提交日志"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 在上次提交中附加一些内容，保持提交日志不变(push之后修改，可能会导致冲突)</span></span><br><span class="line">git add . &amp;&amp; git commit --amend --no-edit</span><br><span class="line"><span class="meta">#</span><span class="bash"> 空提交 —— 可以用来重新触发 CI 构建</span></span><br><span class="line">git commit --allow-empty -m "script"</span><br></pre></td></tr></table></figure>
+
+<h3 id="5、reset命令"><a href="#5、reset命令" class="headerlink" title="5、reset命令"></a>5、reset命令</h3><blockquote>
+<p>Working (未add)&gt;= Staging(add)&gt;= Repo(commit)</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 只动repo, 只是HEAD重置到最新一次提交,撤销commit操作，不撤销add，不会删除本地代码</span></span><br><span class="line">git reset --soft &lt;commit&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 动repo还有staging，撤销add和commit操作，不会删除本地代码</span></span><br><span class="line">git reset --mixed &lt;commit&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 动repo还有staging还有working, 丢弃本地所有更改，删除本地代码</span></span><br><span class="line">git reset --hard &lt;commit&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6、标签tag"><a href="#6、标签tag" class="headerlink" title="6、标签tag"></a>6、标签tag</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> git tag 显示标签</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 默认为HEAD，也可以指定一个commit id</span></span><br><span class="line">git tag &lt;tagname&gt; [commmit id]</span><br><span class="line"><span class="meta">#</span><span class="bash"> 指定标签信息</span></span><br><span class="line">git tag -a &lt;tagname&gt; [commmit id] -m "desc"</span><br><span class="line"><span class="meta">#</span><span class="bash"> 推送tag</span></span><br><span class="line">git push origin &lt;tagname&gt;</span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除标签</span></span><br><span class="line">git tag -d &lt;tagname&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>git</category>
+      </categories>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2020/03/16/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
