@@ -1,6 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Maven总结</title>
+    <url>/2020/03/22/Maven%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h3 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h3><blockquote>
+<p>Maven是一个项目管理工具，他包含了一个项目对象模型，一组标准集合，一个项目生命周期，一个依赖管理系统和用来运行定义生命周期阶段中插件目标的逻辑。</p>
+</blockquote>
+<h3 id="2、maven项目默认目录组织"><a href="#2、maven项目默认目录组织" class="headerlink" title="2、maven项目默认目录组织"></a>2、maven项目默认目录组织</h3><blockquote>
+<p>默认源码：${basedir}/src/main/java</p>
+<p>资源文件:${basedir}/src/main/resources</p>
+<p>测试代码：${basedir}/src/main/test</p>
+<p>JAR文件存放在:${basedir}/target/classes</p>
+</blockquote>
+<h3 id="3、配置文件"><a href="#3、配置文件" class="headerlink" title="3、配置文件"></a>3、配置文件</h3><h4 id="配置本地仓库地址"><a href="#配置本地仓库地址" class="headerlink" title="配置本地仓库地址"></a>配置本地仓库地址</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>/path/to/local/repo<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置镜像仓库URL"><a href="#配置镜像仓库URL" class="headerlink" title="配置镜像仓库URL"></a>配置镜像仓库URL</h4><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span>   </span><br><span class="line"> <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>mirror</p>
+<blockquote>
+<p>mirror相当于一个<strong>拦截器</strong>，它会拦截maven对remote repository的相关请求，把请求里的remote repository地址，重定向到mirror里配置的地址。</p>
+<p>mirror表示的是两个Repository之间的关系</p>
+</blockquote>
+</li>
+<li><p>mirrorOf</p>
+<blockquote>
+<p>标签里面放置的是要被镜像的Repository ID。</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--  匹配所有远程仓库。  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--  匹配仓库repo1和repo2，使用逗号分隔多个远程仓库。 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>repo1,repo2<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span> </span><br><span class="line"><span class="comment">&lt;!--  匹配所有远程仓库，repo1除外，使用感叹号将仓库从匹配中排除。 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*,!repo1<span class="tag">&lt;/<span class="name">miiroOf</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="2个镜像解决方案"><a href="#2个镜像解决方案" class="headerlink" title="2个镜像解决方案"></a>2个镜像解决方案</h4><p>在<strong>setting.xml</strong>中配置一个代替远程仓库的镜像，其他需要单独配置的镜像在项目的<strong>pom.xml</strong>中配置</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-163<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus 163<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://mirrors.163.com/maven/repository/maven-public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">releases</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">releases</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、仓库"><a href="#4、仓库" class="headerlink" title="4、仓库"></a>4、仓库</h3><h4 id="本地仓库"><a href="#本地仓库" class="headerlink" title="本地仓库"></a>本地仓库</h4><blockquote>
+<p>默认情况下，本地仓库在用户目录下的<strong>.m2/repository/</strong>。我们也可以在 settings.xml 文件配置本地仓库的地址</p>
+</blockquote>
+<h4 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h4><blockquote>
+<p>对于Maven来说，每个用户只有一个本地仓库，但是可以配置多个远程仓库。</p>
+</blockquote>
+<ol>
+<li><p>中央仓库</p>
+<blockquote>
+<p>中央仓库可以通过修改setting.xml中的mirrorOf标签，代替默认的<a href="http://repo1.maven.org/maven2/" target="_blank" rel="noopener">中央仓库</a></p>
+</blockquote>
+</li>
+<li><p>私服</p>
+<blockquote>
+<p>内网自建的maven repository，其URL是一个内部网址 </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="仓库优先级"><a href="#仓库优先级" class="headerlink" title="仓库优先级"></a>仓库优先级</h4><blockquote>
+<p>local_repo &gt; settings_profile_repo &gt; pom_profile_repo &gt; pom_repositories &gt; settings_mirror &gt; central</p>
+</blockquote>
+<h4 id="配置多个仓库"><a href="#配置多个仓库" class="headerlink" title="配置多个仓库"></a>配置多个仓库</h4><ul>
+<li><p>setting.xml中的profiles节点配置多个repository</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">profile</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;<span class="name">id</span>&gt;</span>boundlessgeo<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	  <span class="tag">&lt;<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;<span class="name">repository</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;<span class="name">id</span>&gt;</span>boundlessgeo<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repo.boundlessgeo.com/main/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">releases</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">releases</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span>  </span><br><span class="line">	        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">profile</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;<span class="name">profile</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	  <span class="tag">&lt;<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;<span class="name">repository</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">releases</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">releases</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span>  </span><br><span class="line">	        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">profile</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">profile</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	  <span class="tag">&lt;<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;<span class="name">repository</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://central.maven.org/maven2/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">releases</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">releases</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span>  </span><br><span class="line">	        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">profile</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过配置 activeProfiles 子节点激活</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activeProfiles</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>boundlessgeo<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activeProfiles</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Maven</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>git命令记录</title>
     <url>/2020/03/17/git%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h3 id="1、跳到之前的分支"><a href="#1、跳到之前的分支" class="headerlink" title="1、跳到之前的分支"></a>1、跳到之前的分支</h3><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">git checkout - //和cd -类似</span><br></pre></td></tr></table></figure>

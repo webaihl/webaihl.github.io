@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/avatar.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/avatar.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/avatar.jpg">
+  <link rel="mask-icon" href="/images/avatar.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"superweb.club","root":"/","scheme":"Pisces","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="1、概述 Maven是一个项目管理工具，他包含了一个项目对象模型，一组标准集合，一个项目生命周期，一个依赖管理系统和用来运行定义生命周期阶段中插件目标的逻辑。  2、maven项目默认目录组织 默认源码：${basedir}&#x2F;src&#x2F;main&#x2F;java 资源文件:${basedir}&#x2F;src&#x2F;main&#x2F;resources 测试代码：${basedir}&#x2F;src&#x2F;main&#x2F;test JAR文件存放在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Maven总结">
+<meta property="og:url" content="http://superweb.club/2020/03/22/Maven%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="SuperWeb">
+<meta property="og:description" content="1、概述 Maven是一个项目管理工具，他包含了一个项目对象模型，一组标准集合，一个项目生命周期，一个依赖管理系统和用来运行定义生命周期阶段中插件目标的逻辑。  2、maven项目默认目录组织 默认源码：${basedir}&#x2F;src&#x2F;main&#x2F;java 资源文件:${basedir}&#x2F;src&#x2F;main&#x2F;resources 测试代码：${basedir}&#x2F;src&#x2F;main&#x2F;test JAR文件存放在">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-03-22T03:45:47.000Z">
+<meta property="article:modified_time" content="2020-03-22T05:13:21.804Z">
+<meta property="article:author" content="Web">
+<meta property="article:tag" content="Maven">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://superweb.club/2020/03/22/Maven%E6%80%BB%E7%BB%93/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true
+  };
+</script>
+
+  <title>Maven总结 | SuperWeb</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SuperWeb</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags" rel="section"><i class="fa fa-fw fa-tag"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+
+</nav>
+  <div class="site-search">
+    <div class="search-pop-overlay">
+  <div class="popup search-popup">
+      <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocorrect="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+  </div>
+</div>
+
+  </div>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://superweb.club/2020/03/22/Maven%E6%80%BB%E7%BB%93/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="Web">
+      <meta itemprop="description" content="愿我走过的苦难你不必经历，愿我已有的幸福你正在触及。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SuperWeb">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Maven总结
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-03-22 11:45:47 / 修改时间：13:13:21" itemprop="dateCreated datePublished" datetime="2020-03-22T11:45:47+08:00">2020-03-22</time>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-file-word-o"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>3.4k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-clock-o"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>6 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="1、概述"><a href="#1、概述" class="headerlink" title="1、概述"></a>1、概述</h3><blockquote>
+<p>Maven是一个项目管理工具，他包含了一个项目对象模型，一组标准集合，一个项目生命周期，一个依赖管理系统和用来运行定义生命周期阶段中插件目标的逻辑。</p>
+</blockquote>
+<h3 id="2、maven项目默认目录组织"><a href="#2、maven项目默认目录组织" class="headerlink" title="2、maven项目默认目录组织"></a>2、maven项目默认目录组织</h3><blockquote>
+<p>默认源码：${basedir}/src/main/java</p>
+<p>资源文件:${basedir}/src/main/resources</p>
+<p>测试代码：${basedir}/src/main/test</p>
+<p>JAR文件存放在:${basedir}/target/classes</p>
+</blockquote>
+<h3 id="3、配置文件"><a href="#3、配置文件" class="headerlink" title="3、配置文件"></a>3、配置文件</h3><h4 id="配置本地仓库地址"><a href="#配置本地仓库地址" class="headerlink" title="配置本地仓库地址"></a>配置本地仓库地址</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">localRepository</span>&gt;</span>/path/to/local/repo<span class="tag">&lt;/<span class="name">localRepository</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="配置镜像仓库URL"><a href="#配置镜像仓库URL" class="headerlink" title="配置镜像仓库URL"></a>配置镜像仓库URL</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span>   </span><br><span class="line"> <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span> </span><br><span class="line"> <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span> </span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>mirror</p>
+<blockquote>
+<p>mirror相当于一个<strong>拦截器</strong>，它会拦截maven对remote repository的相关请求，把请求里的remote repository地址，重定向到mirror里配置的地址。</p>
+<p>mirror表示的是两个Repository之间的关系</p>
+</blockquote>
+</li>
+<li><p>mirrorOf</p>
+<blockquote>
+<p>标签里面放置的是要被镜像的Repository ID。</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--  匹配所有远程仓库。  --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--  匹配仓库repo1和repo2，使用逗号分隔多个远程仓库。 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>repo1,repo2<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span> </span><br><span class="line"><span class="comment">&lt;!--  匹配所有远程仓库，repo1除外，使用感叹号将仓库从匹配中排除。 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>*,!repo1<span class="tag">&lt;/<span class="name">miiroOf</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="2个镜像解决方案"><a href="#2个镜像解决方案" class="headerlink" title="2个镜像解决方案"></a>2个镜像解决方案</h4><p>在<strong>setting.xml</strong>中配置一个代替远程仓库的镜像，其他需要单独配置的镜像在项目的<strong>pom.xml</strong>中配置</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repositories</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">id</span>&gt;</span>nexus-163<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">name</span>&gt;</span>Nexus 163<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://mirrors.163.com/maven/repository/maven-public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">layout</span>&gt;</span>default<span class="tag">&lt;/<span class="name">layout</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>false<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">releases</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">releases</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repositories</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4、仓库"><a href="#4、仓库" class="headerlink" title="4、仓库"></a>4、仓库</h3><h4 id="本地仓库"><a href="#本地仓库" class="headerlink" title="本地仓库"></a>本地仓库</h4><blockquote>
+<p>默认情况下，本地仓库在用户目录下的<strong>.m2/repository/</strong>。我们也可以在 settings.xml 文件配置本地仓库的地址</p>
+</blockquote>
+<h4 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h4><blockquote>
+<p>对于Maven来说，每个用户只有一个本地仓库，但是可以配置多个远程仓库。</p>
+</blockquote>
+<ol>
+<li><p>中央仓库</p>
+<blockquote>
+<p>中央仓库可以通过修改setting.xml中的mirrorOf标签，代替默认的<a href="http://repo1.maven.org/maven2/" target="_blank" rel="noopener">中央仓库</a></p>
+</blockquote>
+</li>
+<li><p>私服</p>
+<blockquote>
+<p>内网自建的maven repository，其URL是一个内部网址 </p>
+</blockquote>
+</li>
+</ol>
+<h4 id="仓库优先级"><a href="#仓库优先级" class="headerlink" title="仓库优先级"></a>仓库优先级</h4><blockquote>
+<p>local_repo &gt; settings_profile_repo &gt; pom_profile_repo &gt; pom_repositories &gt; settings_mirror &gt; central</p>
+</blockquote>
+<h4 id="配置多个仓库"><a href="#配置多个仓库" class="headerlink" title="配置多个仓库"></a>配置多个仓库</h4><ul>
+<li><p>setting.xml中的profiles节点配置多个repository</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">profile</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;<span class="name">id</span>&gt;</span>boundlessgeo<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	  <span class="tag">&lt;<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;<span class="name">repository</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;<span class="name">id</span>&gt;</span>boundlessgeo<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repo.boundlessgeo.com/main/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">releases</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">releases</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span>  </span><br><span class="line">	        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">profile</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;<span class="name">profile</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	  <span class="tag">&lt;<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;<span class="name">repository</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">releases</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">releases</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span>  </span><br><span class="line">	        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">profile</span>&gt;</span>  </span><br><span class="line">	<span class="tag">&lt;<span class="name">profile</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	  <span class="tag">&lt;<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;<span class="name">repository</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;<span class="name">id</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://central.maven.org/maven2/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">releases</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">releases</span>&gt;</span>  </span><br><span class="line">	      <span class="tag">&lt;<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	        <span class="tag">&lt;<span class="name">enabled</span>&gt;</span>true<span class="tag">&lt;/<span class="name">enabled</span>&gt;</span>  </span><br><span class="line">	        <span class="tag">&lt;<span class="name">updatePolicy</span>&gt;</span>always<span class="tag">&lt;/<span class="name">updatePolicy</span>&gt;</span> </span><br><span class="line">	      <span class="tag">&lt;/<span class="name">snapshots</span>&gt;</span> </span><br><span class="line">	    <span class="tag">&lt;/<span class="name">repository</span>&gt;</span> </span><br><span class="line">	  <span class="tag">&lt;/<span class="name">repositories</span>&gt;</span> </span><br><span class="line">	<span class="tag">&lt;/<span class="name">profile</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">profiles</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过配置 activeProfiles 子节点激活</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">activeProfiles</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>boundlessgeo<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">activeProfile</span>&gt;</span>maven-central<span class="tag">&lt;/<span class="name">activeProfile</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">activeProfiles</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Maven/" rel="tag"># Maven</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/17/git%E5%91%BD%E4%BB%A4%E8%AE%B0%E5%BD%95/" rel="prev" title="git命令记录">
+      <i class="fa fa-chevron-left"></i> git命令记录
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、概述"><span class="nav-number">1.</span> <span class="nav-text">1、概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、maven项目默认目录组织"><span class="nav-number">2.</span> <span class="nav-text">2、maven项目默认目录组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、配置文件"><span class="nav-number">3.</span> <span class="nav-text">3、配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#配置本地仓库地址"><span class="nav-number">3.1.</span> <span class="nav-text">配置本地仓库地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置镜像仓库URL"><span class="nav-number">3.2.</span> <span class="nav-text">配置镜像仓库URL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2个镜像解决方案"><span class="nav-number">3.3.</span> <span class="nav-text">2个镜像解决方案</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、仓库"><span class="nav-number">4.</span> <span class="nav-text">4、仓库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地仓库"><span class="nav-number">4.1.</span> <span class="nav-text">本地仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#远程仓库"><span class="nav-number">4.2.</span> <span class="nav-text">远程仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#仓库优先级"><span class="nav-number">4.3.</span> <span class="nav-text">仓库优先级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置多个仓库"><span class="nav-number">4.4.</span> <span class="nav-text">配置多个仓库</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Web"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Web</p>
+  <div class="site-description" itemprop="description">愿我走过的苦难你不必经历，愿我已有的幸福你正在触及。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+        
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags">
+          
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Web</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    <span title="站点总字数">36k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:05</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v4.2.0
+  </div>
+  <span class="post-meta-divider">|</span>
+  <div class="theme-info">主题 – <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> v7.7.2
+  </div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
